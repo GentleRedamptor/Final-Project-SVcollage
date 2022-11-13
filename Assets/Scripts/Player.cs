@@ -22,24 +22,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private bool canreload = false;
     private bool canshoot = true;
-    private UIManager uimanager;
     public float coins = 0;
     [SerializeField]
     private GameObject futeristicAR;
     // Start is called before the first frame update
     void Start()
     {
-        uimanager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        if (uimanager == null)
-        {
-            Debug.Log("UI Manager is NULL");
-        }
-        controller = GetComponent<CharacterController>();
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        ammo = maxammo;
-        uimanager.ammoupdate(0);
-        uimanager.coinupdate(coins);
+
     }
 
     // Update is called once per frame
@@ -91,7 +80,6 @@ public class Player : MonoBehaviour
         muzzleflash.SetActive(true);
         Ray raycast = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hitinfo;
-        uimanager.ammoupdate(ammo);
         ammo -= 1;
         if (Physics.Raycast(raycast, out hitinfo, 100f))
         {
@@ -99,11 +87,7 @@ public class Player : MonoBehaviour
             GameObject hitanimation = Instantiate(hitmarkerprefab, hitinfo.point, Quaternion.LookRotation(hitinfo.normal));
             Destroy(hitanimation, 0.3f);
 
-            Destructible crate = hitinfo.transform.GetComponent<Destructible>();
-            if(crate != null)
-            {
-                crate.destroyCrate();
-            }
+
         }
         
     }
@@ -111,7 +95,6 @@ public class Player : MonoBehaviour
     public void addcoin(float i)
     {
         coins += i;
-        uimanager.coinupdate(coins);
     }
 
     IEnumerator realod()
@@ -121,7 +104,6 @@ public class Player : MonoBehaviour
         weaponanim.SetTrigger("Reload");
         yield return new WaitForSeconds(1.6f);
         ammo = maxammo;
-        uimanager.ammoupdate(ammo);
         canreload = true;
         canshoot = true;
     }
@@ -129,6 +111,5 @@ public class Player : MonoBehaviour
     public void activefuteristicAR()
     {
         futeristicAR.SetActive(true);
-        uimanager.ammoupdate(ammo);
     }
 }
