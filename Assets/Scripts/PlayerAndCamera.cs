@@ -9,6 +9,8 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] float sensitivity;
     Transform rotateCam;
     [SerializeField] float speed;
+    [SerializeField] float sprintSpeed;
+    float originalSpeed;
     [SerializeField] float gravity;
     [SerializeField] float jumpHeight = 3f;
     CharacterController controller;
@@ -23,7 +25,8 @@ public class PlayerAndCamera : MonoBehaviour
         //Getting Objects and Components
         rotateCam = GameObject.Find("RotateCamJoint").GetComponent<Transform>();
         controller = GetComponent<CharacterController>();
-        groundCheck = GameObject.Find("GroundCheck").GetComponent<Transform>();        
+        groundCheck = GameObject.Find("GroundCheck").GetComponent<Transform>(); 
+        originalSpeed = speed;       
     }
 
     void Update()
@@ -31,6 +34,8 @@ public class PlayerAndCamera : MonoBehaviour
         CheckIfGrounded();
         CamControl();
         if (Input.GetButtonDown("Jump") && isGrounded) Jump();
+        if (Input.GetButton("Fire3")) StartSprint();
+        if (Input.GetButtonUp("Fire3")) StopSprint();
         PlayerMovement();
         if (Input.GetKeyDown(KeyCode.Escape)) ReleaseMouse();
                 
@@ -63,6 +68,14 @@ public class PlayerAndCamera : MonoBehaviour
     {
       velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
+    void StartSprint()
+    {
+        speed = sprintSpeed;
+    }
+    void StopSprint()
+    {
+        speed = originalSpeed;
+    }
     void LockMouse()
     {
         Cursor.visible = false;
@@ -72,6 +85,6 @@ public class PlayerAndCamera : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
     }
+
 }

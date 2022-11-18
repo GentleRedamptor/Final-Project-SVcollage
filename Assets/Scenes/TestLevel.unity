@@ -929,7 +929,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 3.78
-  m_Radius: 0.5
+  m_Radius: 0.22
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -1822,7 +1822,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4032321891967031984}
-  m_LocalRotation: {x: 0.0023668082, y: -0.00115577, z: 0.053001717, w: 0.99859095}
+  m_LocalRotation: {x: 0.0023668085, y: -0.00115577, z: 0.05300172, w: 0.99859095}
   m_LocalPosition: {x: 0.030193843, y: 0.2282042, z: -0.0013753271}
   m_LocalScale: {x: 1, y: 1, z: 0.9999998}
   m_Children:
@@ -2140,7 +2140,7 @@ Animator:
   m_GameObject: {fileID: 8323616241459755073}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 2d226e59912d0014fbf2646ed5c4b916, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 13cff52afb3935f4a97574159c6d5062, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -3699,8 +3699,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensitivity: 200
   speed: 10
-  gravity: -9.81
-  jumpHeight: 300
+  sprintSpeed: 15
+  gravity: -19.62
+  jumpHeight: 5
   groundCheckRadius: 0.4
   groundMask:
     serializedVersion: 2
