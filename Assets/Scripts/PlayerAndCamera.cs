@@ -19,6 +19,18 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] float groundCheckRadius = 0.4f;
     [SerializeField] LayerMask groundMask;
     bool isGrounded;
+
+    //grapple things
+    Transform cam;
+    Transform gunTip;
+    LineRenderer grappleLine;
+    [SerializeField] LayerMask grappleLayer;
+    [SerializeField] float maxGrappleDistance;
+    [SerializeField] float grappleDelayTime;
+    Vector3 grapplePoint;
+    [SerializeField] float grappleCD;
+    float grappleCDTimer;
+    bool isGrappling = false;
     void Start()
     {
         LockMouse();
@@ -26,7 +38,10 @@ public class PlayerAndCamera : MonoBehaviour
         //Getting Objects and Components
         rotateCam = GameObject.Find("RotateCamJoint").GetComponent<Transform>();
         controller = GetComponent<CharacterController>();
-        groundCheck = GameObject.Find("GroundCheck").GetComponent<Transform>();        
+        groundCheck = GameObject.Find("GroundCheck").GetComponent<Transform>();   
+        cam = GameObject.Find("Main Camera").GetComponent<Transform>();  
+        gunTip = GameObject.Find("GunTip").GetComponent<Transform>();
+        grappleLine = GameObject.Find("GrappleGun").GetComponent<LineRenderer>();
     }
 
     void Update()
@@ -36,9 +51,15 @@ public class PlayerAndCamera : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded) Jump();
         if (Input.GetButton("Fire3")) StartSprint();
         if (Input.GetButtonUp("Fire3")) StopSprint();
+        if (Input.GetButtonDown("Fire1")) StartGrapple();
+        if (grappleCDTimer > 0) grappleCDTimer -= Time.deltaTime;
         PlayerMovement();
         if (Input.GetKeyDown(KeyCode.Escape)) ReleaseMouse();
                 
+    }
+    private void LateUpdate() 
+    {
+        if (isGrappling) grappleLine.SetPosition(0, gunTip.position);    
     }
 
     void CamControl()
@@ -81,6 +102,35 @@ public class PlayerAndCamera : MonoBehaviour
     void StopSprint()
     {
         speed = originalSpeed;
+    }
+    void StartGrapple()
+    {
+        if (grappleCDTimer > 0) return;
+        isGrappling = true;
+        RaycastHit hit;
+        if (Physics.Raycast(cam.position , cam.forward , out hit , maxGrappleDistance , grappleLayer))
+        {
+            grapplePoint = hit.point;
+            Invoke(nameof(ExecuteGrapple), grappleDelayTime);
+        }
+        else
+        {
+            grapplePoint = cam.position + cam.forward * maxGrappleDistance;
+            Invoke(nameof(StopGrapple), grappleDelayTime);
+        }
+        grappleLine.enabled = true;
+        grappleLine.SetPosition(1, grapplePoint);
+
+    }
+    void ExecuteGrapple()
+    {
+
+    }
+    void StopGrapple()
+    {
+        isGrappling = false;
+        grappleCDTimer = grappleCD;
+        grappleLine.enabled = false;
     }
     void LockMouse()
     {
