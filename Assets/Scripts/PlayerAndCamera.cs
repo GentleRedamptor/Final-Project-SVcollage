@@ -22,11 +22,11 @@ public class PlayerAndCamera : MonoBehaviour
     void Start()
     {
         LockMouse();
+        originalSpeed = speed;
         //Getting Objects and Components
         rotateCam = GameObject.Find("RotateCamJoint").GetComponent<Transform>();
         controller = GetComponent<CharacterController>();
-        groundCheck = GameObject.Find("GroundCheck").GetComponent<Transform>(); 
-        originalSpeed = speed;       
+        groundCheck = GameObject.Find("GroundCheck").GetComponent<Transform>();        
     }
 
     void Update()
@@ -57,16 +57,22 @@ public class PlayerAndCamera : MonoBehaviour
         Vector3 move = transform.right * horizontalinput + transform.forward * verticalinput;
         velocity.y += gravity * Time.deltaTime;
         controller.Move(move * speed * Time.deltaTime); //move the character on the X and Z axis
+        if ((controller.collisionFlags & CollisionFlags.Above) != 0) velocity.y = -2f; //If there is a ceiling stop jump force 
         controller.Move(velocity * Time.deltaTime); //apply gravity
     }
     void CheckIfGrounded()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
-        if (isGrounded && velocity.y < 0) velocity.y = -2f; //Reseting fall force if grounded
+        if (isGrounded && velocity.y < 0) 
+        {
+            controller.slopeLimit = 45.0f;
+            velocity.y = -2f; //Reseting fall force if grounded
+        }
     }
     void Jump()
     {
-      velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        controller.slopeLimit = 100.0f;
+        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
     void StartSprint()
     {
