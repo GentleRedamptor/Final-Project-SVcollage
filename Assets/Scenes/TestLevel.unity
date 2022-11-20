@@ -3960,10 +3960,10 @@ MonoBehaviour:
   grappleLayer:
     serializedVersion: 2
     m_Bits: 512
-  maxGrappleDistance: 200
+  maxGrappleDistance: 30
   grappleDelayTime: 0.25
-  grappleCD: 0
-  overshootYAxis: 2
+  grappleCD: 0.5
+  overshootYAxis: 3
   grappleOffset: 5
 --- !u!1 &8374540511404196844
 GameObject:

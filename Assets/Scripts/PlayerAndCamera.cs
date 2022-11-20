@@ -36,6 +36,7 @@ public class PlayerAndCamera : MonoBehaviour
     bool activeGrapple;
     [SerializeField] float overshootYAxis;
     [SerializeField] float grappleOffset = 5;
+    bool canCancelGrapple;
 
     void Start()
     {
@@ -55,6 +56,7 @@ public class PlayerAndCamera : MonoBehaviour
         CheckIfGrounded();
         CamControl();
         if (Input.GetButtonDown("Jump") && isGrounded) Jump();
+        if (Input.GetButtonDown("Jump") && !isGrounded && canCancelGrapple) CancelGrapple();
         if (Input.GetButton("Fire3")) StartSprint();
         if (Input.GetButtonUp("Fire3")) StopSprint();
         if (Input.GetButtonDown("Fire1")) StartGrapple();
@@ -104,12 +106,24 @@ public class PlayerAndCamera : MonoBehaviour
             velocity.y = -2f; //Reseting fall force if grounded
             velocity.x = 0;
             velocity.z = 0;
+            canCancelGrapple = false;
         }
     }
     void Jump()
     {
         controller.slopeLimit = 100.0f;
         velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+    }
+    void CancelGrapple()
+    {
+        canCancelGrapple = false;
+        horizontalinput = Input.GetAxis("Horizontal") / 2;
+        verticalinput = Input.GetAxis("Vertical") / 2;
+        controller.slopeLimit = 100.0f;
+        velocity.y = Mathf.Sqrt((jumpHeight / 2) * -2f * gravity);
+        StopGrapple();
+        velocity.x = 0;
+        velocity.z = 0;
     }
     void StartSprint()
     {
@@ -151,6 +165,7 @@ public class PlayerAndCamera : MonoBehaviour
     public void JumpToPosition(Vector3 targetPosition , float trajectoryHeight)
     {
         activeGrapple = true;
+        canCancelGrapple = true;
         velocityToSet = CalculateJumpVelocity(transform.position , targetPosition , trajectoryHeight);
         Invoke(nameof(SetVelocity), 0.1f);
     }
