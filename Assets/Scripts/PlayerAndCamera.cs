@@ -19,6 +19,8 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] float groundCheckRadius = 0.4f;
     [SerializeField] LayerMask groundMask;
     bool isGrounded;
+    float horizontalinput;
+    float verticalinput;
 
     //grapple things
     Transform cam;
@@ -31,6 +33,10 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] float grappleCD;
     float grappleCDTimer;
     bool isGrappling = false;
+    bool activeGrapple;
+    [SerializeField] float overshootYAxis;
+    [SerializeField] float grappleOffset = 5;
+
     void Start()
     {
         LockMouse();
@@ -73,8 +79,16 @@ public class PlayerAndCamera : MonoBehaviour
     }
     void PlayerMovement()
     {
-        float horizontalinput = Input.GetAxis("Horizontal");
-        float verticalinput = Input.GetAxis("Vertical");
+        if (isGrounded)
+        {
+            horizontalinput = Input.GetAxis("Horizontal");
+            verticalinput = Input.GetAxis("Vertical");
+        }
+        else if(activeGrapple) 
+        {
+            horizontalinput = 0; 
+            verticalinput = 0;
+        }
         Vector3 move = transform.right * horizontalinput + transform.forward * verticalinput;
         velocity.y += gravity * Time.deltaTime;
         controller.Move(move * speed * Time.deltaTime); //move the character on the X and Z axis
@@ -88,6 +102,8 @@ public class PlayerAndCamera : MonoBehaviour
         {
             controller.slopeLimit = 45.0f;
             velocity.y = -2f; //Reseting fall force if grounded
+            velocity.x = 0;
+            velocity.z = 0;
         }
     }
     void Jump()
@@ -122,13 +138,41 @@ public class PlayerAndCamera : MonoBehaviour
         grappleLine.SetPosition(1, grapplePoint);
 
     }
+    public Vector3 CalculateJumpVelocity(Vector3 startpoint, Vector3 endpoint, float trajectoryHeight)
+    {
+        float mGravity = gravity - grappleOffset;
+        float displacementY = endpoint.y - startpoint.y;
+        Vector3 displacementXZ = new Vector3(endpoint.x - startpoint.x, 0f , endpoint.z - startpoint.z);
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * mGravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / mGravity)
+            + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / mGravity)); 
+        return velocityXZ + velocityY;
+    }
+    public void JumpToPosition(Vector3 targetPosition , float trajectoryHeight)
+    {
+        activeGrapple = true;
+        velocityToSet = CalculateJumpVelocity(transform.position , targetPosition , trajectoryHeight);
+        Invoke(nameof(SetVelocity), 0.1f);
+    }
+    Vector3 velocityToSet;
+    void SetVelocity()
+    {
+        velocity = velocityToSet;
+    }
     void ExecuteGrapple()
     {
+        Vector3 lowestPoint = new Vector3(transform.position.x , transform.position.y - 1f , transform.position.z);
+        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
+        if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
+        JumpToPosition(grapplePoint, highestPointOnArc);
 
+        Invoke(nameof(StopGrapple), 1f);
     }
     void StopGrapple()
     {
         isGrappling = false;
+        activeGrapple = false;
         grappleCDTimer = grappleCD;
         grappleLine.enabled = false;
     }
