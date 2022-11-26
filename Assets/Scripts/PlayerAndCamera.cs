@@ -24,19 +24,23 @@ public class PlayerAndCamera : MonoBehaviour
 
     //grapple things
     Transform cam;
-    Transform gunTip;
-    LineRenderer grappleLine;
+    public Transform gunTip;
+    public LineRenderer grappleLine;
     [SerializeField] LayerMask grappleLayer;
     [SerializeField] float maxGrappleDistance;
     [SerializeField] float grappleDelayTime;
-    Vector3 grapplePoint;
+    public Vector3 grapplePoint;
     [SerializeField] float grappleCD;
     float grappleCDTimer;
-    bool isGrappling = false;
+    public bool isGrappling = false;
     bool activeGrapple;
     [SerializeField] float overshootYAxis;
     [SerializeField] float grappleOffset = 5;
     bool canCancelGrapple;
+
+    //Attack things
+    Animator playerAnimator;
+    BoxCollider attackCollider;
 
     void Start()
     {
@@ -49,6 +53,8 @@ public class PlayerAndCamera : MonoBehaviour
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();  
         gunTip = GameObject.Find("GunTip").GetComponent<Transform>();
         grappleLine = GameObject.Find("GrappleGun").GetComponent<LineRenderer>();
+        playerAnimator = GameObject.Find("Armature").GetComponent<Animator>();
+        attackCollider = GetComponent<BoxCollider>();
     }
 
     void Update()
@@ -61,6 +67,7 @@ public class PlayerAndCamera : MonoBehaviour
         if (Input.GetButtonUp("Fire3")) StopSprint();
         if (Input.GetButtonDown("Fire1")) StartGrapple();
         if (grappleCDTimer > 0) grappleCDTimer -= Time.deltaTime;
+        if (Input.GetButtonDown("Fire2")) Attack(); 
         PlayerMovement();
         if (Input.GetKeyDown(KeyCode.Escape)) ReleaseMouse();
                 
@@ -149,7 +156,7 @@ public class PlayerAndCamera : MonoBehaviour
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
         grappleLine.enabled = true;
-        grappleLine.SetPosition(1, grapplePoint);
+        //grappleLine.SetPosition(1, grapplePoint); Don't need cause of script animation
 
     }
     public Vector3 CalculateJumpVelocity(Vector3 startpoint, Vector3 endpoint, float trajectoryHeight)
@@ -200,6 +207,26 @@ public class PlayerAndCamera : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    void Attack()
+    {
+        playerAnimator.SetTrigger("Attack");
+        attackCollider.enabled = true;
+        Invoke(nameof(TurnOffAttackCollider), 0.5f);
+    }
+    void TurnOffAttackCollider()
+    {
+        attackCollider.enabled = false;
+    }
+    private void OnTriggerEnter(Collider other) 
+    {
+        if(other.tag == "Enemy")
+        {
+            Debug.Log("Killed an enemy");
+            Destroy(other.gameObject);
+        }
+        
     }
 
 }
