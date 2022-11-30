@@ -2161,6 +2161,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1828121346405178120, guid: 562d3857c57ab66469dee37c494b74d0,
         type: 3}
+      propertyPath: crosshair
+      value: 
+      objectReference: {fileID: 1038623731}
+    - target: {fileID: 1828121346405178120, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
       propertyPath: grappleLayer.m_Bits
       value: 1024
       objectReference: {fileID: 0}
@@ -2168,6 +2173,51 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700493950678879801, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: orthographic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700493950678879801, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: field of view
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700493950678879801, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700493950678879801, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: m_projectionMatrixMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700493950678879807, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: m_CameraType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700493950678879807, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: m_Antialiasing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700493950678879807, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700493950678879807, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: m_RequiresDepthTextureOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700493950678879807, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: m_RequiresOpaqueTextureOption
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 562d3857c57ab66469dee37c494b74d0, type: 3}

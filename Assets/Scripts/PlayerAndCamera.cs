@@ -10,6 +10,8 @@ public class PlayerAndCamera : MonoBehaviour
     float mouseX;
     float mouseY;
     [SerializeField] float sensitivity;
+    float originalSensitivity;
+    float aimAssistSensitivity;
     Transform rotateCam;
     [SerializeField] float speed;
     [SerializeField] float sprintSpeed;
@@ -54,6 +56,8 @@ public class PlayerAndCamera : MonoBehaviour
     {
         LockMouse();
         originalSpeed = speed;
+        originalSensitivity = sensitivity;
+        aimAssistSensitivity = sensitivity * 0.5f;
         //Getting Objects and Components
         rotateCam = GameObject.Find("RotateCamJoint").GetComponent<Transform>();
         controller = GetComponent<CharacterController>();
@@ -161,10 +165,12 @@ public class PlayerAndCamera : MonoBehaviour
         if (Physics.Raycast(cam.position , cam.forward , out hit , maxGrappleDistance , grappleLayer))
         {
             crosshair.color = new Color32(36 , 255 , 0, 255);
+            sensitivity = aimAssistSensitivity;
         }
         else
         {
             crosshair.color = new Color32(255 , 0 , 30 , 255);
+            sensitivity = originalSensitivity;
         }
     }
     void StartGrapple()
