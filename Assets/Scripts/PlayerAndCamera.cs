@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerAndCamera : MonoBehaviour
 {
@@ -19,7 +21,9 @@ public class PlayerAndCamera : MonoBehaviour
     Transform groundCheck;
     [SerializeField] float groundCheckRadius = 0.4f;
     [SerializeField] LayerMask groundMask;
+    [SerializeField] LayerMask fogMask;
     bool isGrounded;
+    bool hasFalled;
     float horizontalinput;
     float verticalinput;
 
@@ -39,6 +43,8 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] float grappleOffset = 5;
     bool canCancelGrapple;
     [SerializeField] float grappleFOV;
+    [SerializeField] Image crosshair;
+    
 
     //Attack things
     Animator playerAnimator;
@@ -62,11 +68,13 @@ public class PlayerAndCamera : MonoBehaviour
     void Update()
     {
         CheckIfGrounded();
+        FallDeath();
         CamControl();
         if (Input.GetButtonDown("Jump") && isGrounded) Jump();
         if (Input.GetButtonDown("Jump") && !isGrounded && canCancelGrapple) CancelGrapple();
         if (Input.GetButton("Fire3")) StartSprint();
         if (Input.GetButtonUp("Fire3")) StopSprint();
+        CheckIfCanGrapple();
         if (Input.GetButtonDown("Fire1")) StartGrapple();
         if (grappleCDTimer > 0) grappleCDTimer -= Time.deltaTime;
         if (Input.GetButtonDown("Fire2")) Attack(); 
@@ -74,10 +82,7 @@ public class PlayerAndCamera : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) ReleaseMouse();
                 
     }
-    private void LateUpdate() 
-    {
-        if (isGrappling) grappleLine.SetPosition(0, gunTip.position);    
-    }
+
 
     void CamControl()
     {
@@ -118,6 +123,14 @@ public class PlayerAndCamera : MonoBehaviour
             canCancelGrapple = false;
         }
     }
+        void FallDeath()
+    {
+        hasFalled = Physics.CheckSphere(groundCheck.position, groundCheckRadius, fogMask);
+        if (hasFalled) 
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
     void Jump()
     {
         controller.slopeLimit = 100.0f;
@@ -141,6 +154,18 @@ public class PlayerAndCamera : MonoBehaviour
     void StopSprint()
     {
         speed = originalSpeed;
+    }
+    void CheckIfCanGrapple()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cam.position , cam.forward , out hit , maxGrappleDistance , grappleLayer))
+        {
+            crosshair.color = new Color32(36 , 255 , 0, 255);
+        }
+        else
+        {
+            crosshair.color = new Color32(255 , 0 , 30 , 255);
+        }
     }
     void StartGrapple()
     {
