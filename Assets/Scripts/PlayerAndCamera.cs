@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class PlayerAndCamera : MonoBehaviour
 {
@@ -19,7 +20,9 @@ public class PlayerAndCamera : MonoBehaviour
     Transform groundCheck;
     [SerializeField] float groundCheckRadius = 0.4f;
     [SerializeField] LayerMask groundMask;
+    [SerializeField] LayerMask fogMask;
     bool isGrounded;
+    bool hasFalled;
     float horizontalinput;
     float verticalinput;
 
@@ -62,6 +65,7 @@ public class PlayerAndCamera : MonoBehaviour
     void Update()
     {
         CheckIfGrounded();
+        FallDeath();
         CamControl();
         if (Input.GetButtonDown("Jump") && isGrounded) Jump();
         if (Input.GetButtonDown("Jump") && !isGrounded && canCancelGrapple) CancelGrapple();
@@ -76,7 +80,7 @@ public class PlayerAndCamera : MonoBehaviour
     }
     private void LateUpdate() 
     {
-        if (isGrappling) grappleLine.SetPosition(0, gunTip.position);    
+        //if (isGrappling) grappleLine.SetPosition(0, gunTip.position);    
     }
 
     void CamControl()
@@ -116,6 +120,14 @@ public class PlayerAndCamera : MonoBehaviour
             velocity.x = 0;
             velocity.z = 0;
             canCancelGrapple = false;
+        }
+    }
+        void FallDeath()
+    {
+        hasFalled = Physics.CheckSphere(groundCheck.position, groundCheckRadius, fogMask);
+        if (hasFalled) 
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
     void Jump()
