@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerAndCamera : MonoBehaviour
 {
@@ -24,19 +25,24 @@ public class PlayerAndCamera : MonoBehaviour
 
     //grapple things
     Transform cam;
-    Transform gunTip;
-    LineRenderer grappleLine;
+    public Transform gunTip;
+    public LineRenderer grappleLine;
     [SerializeField] LayerMask grappleLayer;
     [SerializeField] float maxGrappleDistance;
     [SerializeField] float grappleDelayTime;
-    Vector3 grapplePoint;
+    public Vector3 grapplePoint;
     [SerializeField] float grappleCD;
     float grappleCDTimer;
-    bool isGrappling = false;
+    public bool isGrappling = false;
     bool activeGrapple;
     [SerializeField] float overshootYAxis;
     [SerializeField] float grappleOffset = 5;
     bool canCancelGrapple;
+    [SerializeField] float grappleFOV;
+
+    //Attack things
+    Animator playerAnimator;
+    BoxCollider attackCollider;
 
     void Start()
     {
@@ -49,6 +55,8 @@ public class PlayerAndCamera : MonoBehaviour
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();  
         gunTip = GameObject.Find("GunTip").GetComponent<Transform>();
         grappleLine = GameObject.Find("GrappleGun").GetComponent<LineRenderer>();
+        playerAnimator = GameObject.Find("Armature").GetComponent<Animator>();
+        attackCollider = GetComponent<BoxCollider>();
     }
 
     void Update()
@@ -61,6 +69,7 @@ public class PlayerAndCamera : MonoBehaviour
         if (Input.GetButtonUp("Fire3")) StopSprint();
         if (Input.GetButtonDown("Fire1")) StartGrapple();
         if (grappleCDTimer > 0) grappleCDTimer -= Time.deltaTime;
+        if (Input.GetButtonDown("Fire2")) Attack(); 
         PlayerMovement();
         if (Input.GetKeyDown(KeyCode.Escape)) ReleaseMouse();
                 
@@ -149,7 +158,7 @@ public class PlayerAndCamera : MonoBehaviour
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
         grappleLine.enabled = true;
-        grappleLine.SetPosition(1, grapplePoint);
+        //grappleLine.SetPosition(1, grapplePoint); Don't need cause of script animation
 
     }
     public Vector3 CalculateJumpVelocity(Vector3 startpoint, Vector3 endpoint, float trajectoryHeight)
@@ -181,7 +190,7 @@ public class PlayerAndCamera : MonoBehaviour
         float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
         if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
         JumpToPosition(grapplePoint, highestPointOnArc);
-
+        DoFov(grappleFOV);
         Invoke(nameof(StopGrapple), 1f);
     }
     void StopGrapple()
@@ -190,6 +199,7 @@ public class PlayerAndCamera : MonoBehaviour
         activeGrapple = false;
         grappleCDTimer = grappleCD;
         grappleLine.enabled = false;
+        DoFov(85.0f);
     }
     void LockMouse()
     {
@@ -200,6 +210,31 @@ public class PlayerAndCamera : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    void Attack()
+    {
+        playerAnimator.SetTrigger("Attack");
+        attackCollider.enabled = true;
+        Invoke(nameof(TurnOffAttackCollider), 0.5f);
+    }
+    void TurnOffAttackCollider()
+    {
+        attackCollider.enabled = false;
+    }
+    private void OnTriggerEnter(Collider other) 
+    {
+        if(other.tag == "Enemy")
+        {
+            Debug.Log("Killed an enemy");
+            Destroy(other.gameObject);
+        }
+        
+    }
+    void DoFov(float endValue)
+    {
+       cam.gameObject.GetComponent<Camera>().DOFieldOfView(endValue , 0.25f);
+
     }
 
 }
