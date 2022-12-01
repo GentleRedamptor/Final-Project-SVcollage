@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class PlayerAndCamera : MonoBehaviour
 {
-    public int health = 3;
     float mouseX;
     float mouseY;
     [SerializeField] float sensitivity;
@@ -127,11 +126,6 @@ public class PlayerAndCamera : MonoBehaviour
             velocity.z = 0;
             canCancelGrapple = false;
         }
-    }
-    public void takeDamage(int amount)
-    {
-        health -= amount;
-        if (health <= 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
         void FallDeath()
     {
