@@ -66,7 +66,7 @@ public class EnemyBehaviour : MonoBehaviour
                 Debug.Log(hit.transform.name);
                 if (hit.collider.name == "Player")
                 {
-                    PlayerAndCamera player = hit.transform.GetComponent<PlayerAndCamera>();
+                    HealthHearts player = hit.transform.GetComponent<HealthHearts>();
 
                     player.takeDamage(dmg);
                 }
@@ -85,6 +85,7 @@ public class EnemyBehaviour : MonoBehaviour
     }
     IEnumerator DelayShot()
     {
+
         yield return new WaitForSeconds(3);
 
     }
