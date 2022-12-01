@@ -525,6 +525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3642627c408124844ba8b8c96cf0fb9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 3
   sensitivity: 800
   speed: 15
   sprintSpeed: 20
@@ -550,6 +551,7 @@ MonoBehaviour:
   overshootYAxis: 3
   grappleOffset: 5
   grappleFOV: 100
+  crosshair: {fileID: 0}
 --- !u!114 &1828121346405178126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1008,7 +1010,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7043920324187105270}
   m_Layer: 0
-  m_Name: Head
+  m_Name: PlayerHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
