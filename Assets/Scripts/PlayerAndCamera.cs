@@ -164,10 +164,19 @@ public class PlayerAndCamera : MonoBehaviour
     void CheckIfCanGrapple()
     {
         RaycastHit hit;
-        if (Physics.Raycast(cam.position , cam.forward , out hit , maxGrappleDistance , grappleLayer))
+        if (Physics.Raycast(cam.position , cam.forward , out hit , maxGrappleDistance))
         {
-            crosshair.color = new Color32(36 , 255 , 0, 255);
-            sensitivity = aimAssistSensitivity;
+            if (hit.collider.tag == "GrappbleObject")
+            {
+                crosshair.color = new Color32(36 , 255 , 0, 255);
+                sensitivity = aimAssistSensitivity;;
+            }
+            else
+            {
+            crosshair.color = new Color32(255 , 0 , 30 , 255);
+            sensitivity = originalSensitivity;
+            }
+            
         }
         else
         {
@@ -180,10 +189,18 @@ public class PlayerAndCamera : MonoBehaviour
         if (grappleCDTimer > 0) return;
         isGrappling = true;
         RaycastHit hit;
-        if (Physics.Raycast(cam.position , cam.forward , out hit , maxGrappleDistance , grappleLayer))
+        if (Physics.Raycast(cam.position , cam.forward , out hit , maxGrappleDistance ))
         {
-            grapplePoint = hit.point;
-            Invoke(nameof(ExecuteGrapple), grappleDelayTime);
+            if (hit.collider.tag == "GrappbleObject")
+            {
+                grapplePoint = hit.point;
+                Invoke(nameof(ExecuteGrapple), grappleDelayTime);
+            }
+            else
+            {
+                grapplePoint = cam.position + cam.forward * maxGrappleDistance;
+                Invoke(nameof(StopGrapple), grappleDelayTime);
+            }
         }
         else
         {

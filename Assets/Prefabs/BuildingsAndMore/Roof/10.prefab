@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -8715352051644037745}
   m_Layer: 10
   m_Name: 10
-  m_TagString: Untagged
+  m_TagString: GrappbleObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
