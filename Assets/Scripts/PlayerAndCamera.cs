@@ -58,6 +58,14 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] int healthPoints;
     [SerializeField] Image[] hearts;
     [SerializeField] Sprite Heart;
+    //audio clips and such
+    public AudioSource AS;
+    public AudioClip jumpSound;
+    public AudioClip EmptySlice;
+    public AudioClip EmptyShot;
+    public AudioClip Ghit;
+    public AudioClip Grope;
+    public AudioClip Slice;
 
     void Start()
     {
@@ -83,7 +91,7 @@ public class PlayerAndCamera : MonoBehaviour
         CheckIfGrounded();
         FallDeath();
         CamControl();
-        if (Input.GetButtonDown("Jump") && isGrounded) Jump();
+        if (Input.GetButtonDown("Jump") && isGrounded) Jump(); 
         if (Input.GetButtonDown("Jump") && !isGrounded && canCancelGrapple) CancelGrapple();
         if (Input.GetButton("Fire3")) StartSprint();
         if (Input.GetButtonUp("Fire3")) StopSprint();
@@ -147,6 +155,7 @@ public class PlayerAndCamera : MonoBehaviour
     }
     void Jump()
     {
+        AS.PlayOneShot(jumpSound);
         controller.slopeLimit = 100.0f;
         velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
@@ -201,17 +210,20 @@ public class PlayerAndCamera : MonoBehaviour
         {
             if (hit.collider.tag == "GrappbleObject")
             {
+                AS.PlayOneShot(Ghit);
                 grapplePoint = hit.point;
                 Invoke(nameof(ExecuteGrapple), grappleDelayTime);
             }
             else
             {
+                AS.PlayOneShot(EmptyShot);
                 grapplePoint = cam.position + cam.forward * maxGrappleDistance;
                 Invoke(nameof(StopGrapple), grappleDelayTime);
             }
         }
         else
         {
+            AS.PlayOneShot(EmptyShot);
             grapplePoint = cam.position + cam.forward * maxGrappleDistance;
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
@@ -249,6 +261,7 @@ public class PlayerAndCamera : MonoBehaviour
         JumpToPosition(grapplePoint, highestPointOnArc);
         DoFov(grappleFOV);
         Invoke(nameof(StopGrapple), 1f);
+        AS.PlayOneShot(Grope);
     }
     void StopGrapple()
     {
@@ -271,6 +284,7 @@ public class PlayerAndCamera : MonoBehaviour
 
     void Attack()
     {
+        AS.PlayOneShot(EmptySlice);
         playerAnimator.SetTrigger("Attack");
         attackCollider.enabled = true;
         Invoke(nameof(TurnOffAttackCollider), 0.5f);
