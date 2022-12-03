@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.643947, g: 0.67913204, b: 0.73617595, a: 1}
+  m_IndirectSpecularColor: {r: 0.6439174, g: 0.67911834, b: 0.7361682, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2294,11 +2294,6 @@ PrefabInstance:
       propertyPath: crosshair
       value: 
       objectReference: {fileID: 1038623731}
-    - target: {fileID: 1828121346405178120, guid: 562d3857c57ab66469dee37c494b74d0,
-        type: 3}
-      propertyPath: grappleLayer.m_Bits
-      value: 1024
-      objectReference: {fileID: 0}
     - target: {fileID: 1828121346405178123, guid: 562d3857c57ab66469dee37c494b74d0,
         type: 3}
       propertyPath: m_Name
