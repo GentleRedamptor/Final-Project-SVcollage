@@ -15,7 +15,7 @@ public class EnemyLogic : MonoBehaviour
     void Start()
     {
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();
-        sphereCastredius = 1f;
+        sphereCastredius = 0.1f;
     }
 
     void Update()
