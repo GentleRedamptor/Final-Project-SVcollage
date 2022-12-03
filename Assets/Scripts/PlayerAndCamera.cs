@@ -47,6 +47,7 @@ public class PlayerAndCamera : MonoBehaviour
     bool canCancelGrapple;
     [SerializeField] float grappleFOV;
     [SerializeField] Image crosshair;
+    float sphereCastredius;
     
 
     //Attack things
@@ -59,6 +60,7 @@ public class PlayerAndCamera : MonoBehaviour
         originalSpeed = speed;
         originalSensitivity = sensitivity;
         aimAssistSensitivity = sensitivity * 0.5f;
+        sphereCastredius = 0.1f;
         //Getting Objects and Components
         rotateCam = GameObject.Find("RotateCamJoint").GetComponent<Transform>();
         controller = GetComponent<CharacterController>();
@@ -164,7 +166,7 @@ public class PlayerAndCamera : MonoBehaviour
     void CheckIfCanGrapple()
     {
         RaycastHit hit;
-        if (Physics.Raycast(cam.position , cam.forward , out hit , maxGrappleDistance))
+        if (Physics.SphereCast(cam.position, sphereCastredius , cam.forward, out hit, maxGrappleDistance))
         {
             if (hit.collider.tag == "GrappbleObject")
             {
@@ -189,7 +191,7 @@ public class PlayerAndCamera : MonoBehaviour
         if (grappleCDTimer > 0) return;
         isGrappling = true;
         RaycastHit hit;
-        if (Physics.Raycast(cam.position , cam.forward , out hit , maxGrappleDistance ))
+        if (Physics.SphereCast(cam.position, sphereCastredius , cam.forward, out hit, maxGrappleDistance))
         {
             if (hit.collider.tag == "GrappbleObject")
             {
