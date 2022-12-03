@@ -54,13 +54,20 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] Animator playerAnimator;
     BoxCollider attackCollider;
 
+    //Health system
+    [SerializeField] int healthPoints;
+    [SerializeField] Image[] hearts;
+    [SerializeField] Sprite Heart;
+
     void Start()
     {
         LockMouse();
         originalSpeed = speed;
         originalSensitivity = sensitivity;
         aimAssistSensitivity = sensitivity * 0.5f;
+        healthPoints = 3;
         sphereCastredius = 0.1f;
+        //UpdateHealthUI();
         //Getting Objects and Components
         rotateCam = GameObject.Find("RotateCamJoint").GetComponent<Transform>();
         controller = GetComponent<CharacterController>();
@@ -218,8 +225,7 @@ public class PlayerAndCamera : MonoBehaviour
         float displacementY = endpoint.y - startpoint.y;
         Vector3 displacementXZ = new Vector3(endpoint.x - startpoint.x, 0f , endpoint.z - startpoint.z);
         Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * mGravity * trajectoryHeight);
-        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / mGravity)
-            + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / mGravity)); 
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / mGravity) + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / mGravity)); 
         return velocityXZ + velocityY;
     }
     public void JumpToPosition(Vector3 targetPosition , float trajectoryHeight)
@@ -285,7 +291,32 @@ public class PlayerAndCamera : MonoBehaviour
     void DoFov(float endValue)
     {
        cam.gameObject.GetComponent<Camera>().DOFieldOfView(endValue , 0.25f);
+    }
 
+    public void TakeDamage()
+    {
+        healthPoints --;
+        //play get hit SFX
+        UpdateHealthUI();
+        if (healthPoints < 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//kill player
+    }
+    void UpdateHealthUI()
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            if(i<healthPoints)
+            {
+                hearts[i].sprite = Heart;
+            }
+            if (i < healthPoints)
+            {
+                hearts[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                hearts[i].gameObject.SetActive(false);
+            }
+        }
     }
 
 }
