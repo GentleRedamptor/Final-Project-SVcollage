@@ -7,7 +7,13 @@ using UnityEngine.UI;
 
 public class PlayerAndCamera : MonoBehaviour
 {
-   
+    public AudioSource AS;
+    public AudioClip GHit;
+    public AudioClip GRope;
+    public AudioClip EmptyShot;
+    public AudioClip EmptySlice;
+    public AudioClip Slice;
+    public AudioClip JumpSound;
     float mouseX;
     float mouseY;
     [SerializeField] float sensitivity;
@@ -71,14 +77,14 @@ public class PlayerAndCamera : MonoBehaviour
         CheckIfGrounded();
         FallDeath();
         CamControl();
-        if (Input.GetButtonDown("Jump") && isGrounded) Jump();
+        if (Input.GetButtonDown("Jump") && isGrounded) {Jump(); AS.PlayOneShot(JumpSound); }
         if (Input.GetButtonDown("Jump") && !isGrounded && canCancelGrapple) CancelGrapple();
         if (Input.GetButton("Fire3")) StartSprint();
         if (Input.GetButtonUp("Fire3")) StopSprint();
         CheckIfCanGrapple();
-        if (Input.GetButtonDown("Fire1")) StartGrapple();
+        if (Input.GetButtonDown("Fire1"))  StartGrapple(); 
         if (grappleCDTimer > 0) grappleCDTimer -= Time.deltaTime;
-        if (Input.GetButtonDown("Fire2")) Attack(); 
+        if (Input.GetButtonDown("Fire2"))  Attack(); 
         PlayerMovement();
         if (Input.GetKeyDown(KeyCode.Escape)) ReleaseMouse();
                 
@@ -148,6 +154,7 @@ public class PlayerAndCamera : MonoBehaviour
         StopGrapple();
         velocity.x = 0;
         velocity.z = 0;
+        
     }
     void StartSprint()
     {
@@ -178,11 +185,13 @@ public class PlayerAndCamera : MonoBehaviour
         {
             grapplePoint = hit.point;
             Invoke(nameof(ExecuteGrapple), grappleDelayTime);
+            AS.PlayOneShot(GHit);
         }
         else
         {
             grapplePoint = cam.position + cam.forward * maxGrappleDistance;
             Invoke(nameof(StopGrapple), grappleDelayTime);
+            AS.PlayOneShot(EmptyShot);
         }
         grappleLine.enabled = true;
         //grappleLine.SetPosition(1, grapplePoint); Don't need cause of script animation
@@ -217,8 +226,10 @@ public class PlayerAndCamera : MonoBehaviour
         float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
         if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
         JumpToPosition(grapplePoint, highestPointOnArc);
+        AS.PlayOneShot(GRope);
         DoFov(grappleFOV);
         Invoke(nameof(StopGrapple), 1f);
+
     }
     void StopGrapple()
     {
@@ -241,9 +252,12 @@ public class PlayerAndCamera : MonoBehaviour
 
     void Attack()
     {
+        
         playerAnimator.SetTrigger("Attack");
+        AS.PlayOneShot(EmptySlice);
         attackCollider.enabled = true;
         Invoke(nameof(TurnOffAttackCollider), 0.5f);
+        
     }
     void TurnOffAttackCollider()
     {
