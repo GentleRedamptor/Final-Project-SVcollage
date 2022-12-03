@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyArmMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
     Transform playerTransform;
 
     void Start()
@@ -12,7 +11,6 @@ public class EnemyArmMovement : MonoBehaviour
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();        
     }
 
-    // Update is called once per frame
     void Update()
     {
        AimArm(); 

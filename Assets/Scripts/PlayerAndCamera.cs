@@ -51,7 +51,7 @@ public class PlayerAndCamera : MonoBehaviour
     
 
     //Attack things
-    Animator playerAnimator;
+    [SerializeField] Animator playerAnimator;
     BoxCollider attackCollider;
 
     void Start()
@@ -68,7 +68,6 @@ public class PlayerAndCamera : MonoBehaviour
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();  
         gunTip = GameObject.Find("GunTip").GetComponent<Transform>();
         grappleLine = GameObject.Find("GrappleGun").GetComponent<LineRenderer>();
-        playerAnimator = GameObject.Find("Armature").GetComponent<Animator>();
         attackCollider = GetComponent<BoxCollider>();
     }
 

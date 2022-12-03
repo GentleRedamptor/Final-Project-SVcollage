@@ -71,6 +71,7 @@ public class EnemyLogic : MonoBehaviour
             Debug.DrawRay(gunTip.position, direction, Color.red, 1.0f);
             if (hit.collider.tag == "Player")
             {
+                //play gun explosion SFX
                 Debug.Log(hit.transform.name);
             }
         }
