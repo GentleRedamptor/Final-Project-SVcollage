@@ -3020,7 +3020,7 @@ PrefabInstance:
         type: 3}
       propertyPath: GRope
       value: 
-      objectReference: {fileID: 8300000, guid: f930b958f89b642e2a5b3eae22ec7ac6, type: 3}
+      objectReference: {fileID: 8300000, guid: 3569e7514125e41cbbc47ce96e2241c8, type: 3}
     - target: {fileID: 1828121346405178120, guid: 562d3857c57ab66469dee37c494b74d0,
         type: 3}
       propertyPath: Slice
@@ -3038,6 +3038,11 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 5135491f41c3c4198ac5cc344cba1b6a, type: 3}
     - target: {fileID: 1828121346405178120, guid: 562d3857c57ab66469dee37c494b74d0,
         type: 3}
+      propertyPath: JumpSound
+      value: 
+      objectReference: {fileID: 8300000, guid: d1399f7ba0f9f408ba208fdf5d2c510f, type: 3}
+    - target: {fileID: 1828121346405178120, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
       propertyPath: crosshair
       value: 
       objectReference: {fileID: 484261621}
@@ -3045,7 +3050,7 @@ PrefabInstance:
         type: 3}
       propertyPath: EmptySlice
       value: 
-      objectReference: {fileID: 8300000, guid: 286277e924a3f4a8f8c3f2bb59a92171, type: 3}
+      objectReference: {fileID: 8300000, guid: 5c308059fec3f4229b3738eb47beda4a, type: 3}
     - target: {fileID: 1828121346405178121, guid: 562d3857c57ab66469dee37c494b74d0,
         type: 3}
       propertyPath: m_Enabled
