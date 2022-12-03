@@ -11,6 +11,7 @@ public class EnemyLogic : MonoBehaviour
     bool isAttacking;
     [SerializeField] Transform gunTip;
     float sphereCastredius;
+    [SerializeField] float timeUntilShooting;
     
     void Start()
     {
@@ -51,19 +52,8 @@ public class EnemyLogic : MonoBehaviour
     IEnumerator ShootingProcess()
     {
         isAttacking = true;
-        Debug.Log("Started shooting...");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("1 second pass");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("2 second pass");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("3 second pass");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("4 second pass");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("5 second pass");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("Shoot!!!!");
+
+        yield return new WaitForSeconds(timeUntilShooting);
         RaycastHit hit;
         Vector3 direction = playerTransform.position - transform.position;
         if (Physics.SphereCast(gunTip.position, sphereCastredius , direction, out hit, lookRange)) 
@@ -71,7 +61,10 @@ public class EnemyLogic : MonoBehaviour
             Debug.DrawRay(gunTip.position, direction, Color.red, 1.0f);
             if (hit.collider.tag == "Player")
             {
+                //play gun explosion SFX
                 Debug.Log(hit.transform.name);
+                PlayerAndCamera player = hit.transform.GetComponent<PlayerAndCamera>();
+                player.TakeDamage();
             }
         }
         yield return new WaitForSeconds(1f);
