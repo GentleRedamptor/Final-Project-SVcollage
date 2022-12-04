@@ -12,11 +12,17 @@ public class EnemyLogic : MonoBehaviour
     [SerializeField] Transform gunTip;
     float sphereCastredius;
     [SerializeField] float timeUntilShooting;
+    SpriteRenderer exclamationMark;
+    [SerializeField] float bigTInterval; //D 0.25
+    [SerializeField] float smallTInterval; //D 0.1
+    [SerializeField] float lastTInterval; //D 1
     
     void Start()
     {
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();
+        exclamationMark = GameObject.Find("ExclamationMark").GetComponent<SpriteRenderer>();
         sphereCastredius = 0.1f;
+        exclamationMark.enabled = false;
     }
 
     void Update()
@@ -44,7 +50,11 @@ public class EnemyLogic : MonoBehaviour
         if (Physics.SphereCast(gunTip.position, sphereCastredius , direction, out hit, lookRange)) 
         {
             Debug.DrawRay(gunTip.position, direction, Color.red, 1.0f);
-            if (hit.collider.tag == "Player") isFollowingPlayer = true;
+            if (hit.collider.tag == "Player")
+            {
+                isFollowingPlayer = true;
+                exclamationMark.enabled = true;
+            } 
         }
 
     }
@@ -53,7 +63,29 @@ public class EnemyLogic : MonoBehaviour
     {
         isAttacking = true;
 
-        yield return new WaitForSeconds(timeUntilShooting);
+        //yield return new WaitForSeconds(timeUntilShooting);
+        for (int i = 0; i < 5; i++) 
+        {
+            yield return new WaitForSeconds(bigTInterval);
+            exclamationMark.enabled = false;
+            yield return new WaitForSeconds(bigTInterval);
+            exclamationMark.enabled = true;   
+            //beep
+        }
+        for (int i = 0; i < 7; i++) 
+        {
+            yield return new WaitForSeconds(smallTInterval);
+            exclamationMark.enabled = false;
+            yield return new WaitForSeconds(smallTInterval);
+            exclamationMark.enabled = true;
+            //beep   
+        }
+        yield return new WaitForSeconds(smallTInterval);
+        exclamationMark.enabled = false;
+        yield return new WaitForSeconds(smallTInterval);
+        exclamationMark.enabled = true;
+        //long beep
+        yield return new WaitForSeconds(lastTInterval);
         RaycastHit hit;
         Vector3 direction = playerTransform.position - transform.position;
         if (Physics.SphereCast(gunTip.position, sphereCastredius , direction, out hit, lookRange)) 
@@ -67,8 +99,8 @@ public class EnemyLogic : MonoBehaviour
                 player.TakeDamage();
             }
         }
-        yield return new WaitForSeconds(1f);
         isAttacking = false;
         isFollowingPlayer = false;
+        exclamationMark.enabled = false;
     }
 }
