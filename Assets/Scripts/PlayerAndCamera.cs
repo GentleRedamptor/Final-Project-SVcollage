@@ -301,6 +301,7 @@ public class PlayerAndCamera : MonoBehaviour
         {
             Debug.Log("Killed an enemy");
             Destroy(other.gameObject);
+            AS.PlayOneShot(Slice);
         }
         
     }
