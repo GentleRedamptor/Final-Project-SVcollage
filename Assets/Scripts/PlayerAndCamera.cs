@@ -66,6 +66,8 @@ public class PlayerAndCamera : MonoBehaviour
     public AudioClip Ghit;
     public AudioClip Grope;
     public AudioClip Slice;
+    public AudioClip GetHit;
+    
 
     void Start()
     {
@@ -310,7 +312,7 @@ public class PlayerAndCamera : MonoBehaviour
     public void TakeDamage()
     {
         healthPoints --;
-        //play get hit SFX
+        AS.PlayOneShot(GetHit);
         UpdateHealthUI();
         if (healthPoints < 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//kill player
     }

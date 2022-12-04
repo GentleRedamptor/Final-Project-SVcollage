@@ -1172,6 +1172,7 @@ MonoBehaviour:
   Ghit: {fileID: 8300000, guid: e4fdd7592586e4bdcbe823958deb8e3f, type: 3}
   Grope: {fileID: 8300000, guid: 3569e7514125e41cbbc47ce96e2241c8, type: 3}
   Slice: {fileID: 8300000, guid: fe18c12c980ba4454a9a7f4002f05a5a, type: 3}
+  GetHit: {fileID: 8300000, guid: 02f08481ddcba45409804774a151bdb8, type: 3}
 --- !u!114 &1828121346405178126
 MonoBehaviour:
   m_ObjectHideFlags: 0
