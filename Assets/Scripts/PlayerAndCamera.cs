@@ -29,6 +29,7 @@ public class PlayerAndCamera : MonoBehaviour
     bool hasFalled;
     float horizontalinput;
     float verticalinput;
+    bool hasJumped;
 
     //grapple things
     Transform cam;
@@ -49,15 +50,21 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] Image crosshair;
     float sphereCastredius;
     
-
     //Attack things
     [SerializeField] Animator playerAnimator;
     BoxCollider attackCollider;
+    bool isAttacking;
 
     //Health system
     [SerializeField] int healthPoints;
     [SerializeField] Image[] hearts;
     [SerializeField] Sprite Heart;
+
+    //Pause Menu
+    [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject settingsMenu;
+    bool pauseActive;
+    
 
     void Start()
     {
@@ -67,7 +74,10 @@ public class PlayerAndCamera : MonoBehaviour
         aimAssistSensitivity = sensitivity * 0.5f;
         healthPoints = 3;
         sphereCastredius = 0.1f;
-        //UpdateHealthUI();
+        pauseActive = false;
+        isAttacking = false;
+        isGrappling = false;
+        UpdateHealthUI();
         //Getting Objects and Components
         rotateCam = GameObject.Find("RotateCamJoint").GetComponent<Transform>();
         controller = GetComponent<CharacterController>();
@@ -80,6 +90,8 @@ public class PlayerAndCamera : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape)) PauseMenu();
+        if (pauseActive) return;
         CheckIfGrounded();
         FallDeath();
         CamControl();
@@ -88,12 +100,10 @@ public class PlayerAndCamera : MonoBehaviour
         if (Input.GetButton("Fire3")) StartSprint();
         if (Input.GetButtonUp("Fire3")) StopSprint();
         CheckIfCanGrapple();
-        if (Input.GetButtonDown("Fire1")) StartGrapple();
+        if (Input.GetButtonDown("Fire1") && !isGrappling) StartGrapple();
         if (grappleCDTimer > 0) grappleCDTimer -= Time.deltaTime;
-        if (Input.GetButtonDown("Fire2")) Attack(); 
-        PlayerMovement();
-        if (Input.GetKeyDown(KeyCode.Escape)) ReleaseMouse();
-                
+        if (Input.GetButtonDown("Fire2") && !isAttacking) Attack(); 
+        PlayerMovement();                
     }
 
 
@@ -129,6 +139,8 @@ public class PlayerAndCamera : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
         if (isGrounded && velocity.y < 0) 
         {
+            if(hasJumped) Debug.Log("Landing Sound");//play landingSFX
+            hasJumped = false;
             controller.slopeLimit = 45.0f;
             velocity.y = -2f; //Reseting fall force if grounded
             velocity.x = 0;
@@ -137,7 +149,7 @@ public class PlayerAndCamera : MonoBehaviour
         }
     }
  
-        void FallDeath()
+    void FallDeath()
     {
         hasFalled = Physics.CheckSphere(groundCheck.position, groundCheckRadius, fogMask);
         if (hasFalled) 
@@ -149,6 +161,7 @@ public class PlayerAndCamera : MonoBehaviour
     {
         controller.slopeLimit = 100.0f;
         velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        hasJumped = true;
     }
     void CancelGrapple()
     {
@@ -239,6 +252,7 @@ public class PlayerAndCamera : MonoBehaviour
     void SetVelocity()
     {
         velocity = velocityToSet;
+        hasJumped = true;
     }
     void ExecuteGrapple()
     {
@@ -263,14 +277,25 @@ public class PlayerAndCamera : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
-    void ReleaseMouse()
+    void PauseMenu()
     {
+        if (pauseActive)
+        {
+            LockMouse();
+            pauseMenu.SetActive(false);
+            settingsMenu.SetActive(false);
+            pauseActive = false;
+            return;   
+        }
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        pauseMenu.SetActive(true);
+        pauseActive = true;
     }
 
     void Attack()
     {
+        isAttacking = true;
         playerAnimator.SetTrigger("Attack");
         attackCollider.enabled = true;
         Invoke(nameof(TurnOffAttackCollider), 0.5f);
@@ -278,12 +303,12 @@ public class PlayerAndCamera : MonoBehaviour
     void TurnOffAttackCollider()
     {
         attackCollider.enabled = false;
+        isAttacking = false;
     }
     private void OnTriggerEnter(Collider other) 
     {
         if(other.tag == "Enemy")
         {
-            Debug.Log("Killed an enemy");
             Destroy(other.gameObject);
         }
         

@@ -12,7 +12,7 @@ public class EnemyLogic : MonoBehaviour
     [SerializeField] Transform gunTip;
     float sphereCastredius;
     [SerializeField] float timeUntilShooting;
-    SpriteRenderer exclamationMark;
+    [SerializeField] SpriteRenderer exclamationMark;
     [SerializeField] float bigTInterval; //D 0.25
     [SerializeField] float smallTInterval; //D 0.1
     [SerializeField] float lastTInterval; //D 1
@@ -20,7 +20,6 @@ public class EnemyLogic : MonoBehaviour
     void Start()
     {
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();
-        exclamationMark = GameObject.Find("ExclamationMark").GetComponent<SpriteRenderer>();
         sphereCastredius = 0.1f;
         exclamationMark.enabled = false;
     }
@@ -94,7 +93,6 @@ public class EnemyLogic : MonoBehaviour
             if (hit.collider.tag == "Player")
             {
                 //play gun explosion SFX
-                Debug.Log(hit.transform.name);
                 PlayerAndCamera player = hit.transform.GetComponent<PlayerAndCamera>();
                 player.TakeDamage();
             }
