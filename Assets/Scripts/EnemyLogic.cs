@@ -16,7 +16,12 @@ public class EnemyLogic : MonoBehaviour
     [SerializeField] float bigTInterval; //D 0.25
     [SerializeField] float smallTInterval; //D 0.1
     [SerializeField] float lastTInterval; //D 1
-    
+    // sound effects
+    public AudioSource AS;
+    public AudioClip ShortBeep;
+    public AudioClip LongBeep;
+    public AudioClip Fire;
+
     void Start()
     {
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();
@@ -68,8 +73,10 @@ public class EnemyLogic : MonoBehaviour
             yield return new WaitForSeconds(bigTInterval);
             exclamationMark.enabled = false;
             yield return new WaitForSeconds(bigTInterval);
-            exclamationMark.enabled = true;   
+            exclamationMark.enabled = true;
             //beep
+            AS.PlayOneShot(ShortBeep);
+
         }
         for (int i = 0; i < 7; i++) 
         {
@@ -77,13 +84,15 @@ public class EnemyLogic : MonoBehaviour
             exclamationMark.enabled = false;
             yield return new WaitForSeconds(smallTInterval);
             exclamationMark.enabled = true;
-            //beep   
+            //beep
+            AS.PlayOneShot(ShortBeep);
         }
         yield return new WaitForSeconds(smallTInterval);
         exclamationMark.enabled = false;
         yield return new WaitForSeconds(smallTInterval);
         exclamationMark.enabled = true;
         //long beep
+        AS.PlayOneShot(LongBeep);
         yield return new WaitForSeconds(lastTInterval);
         RaycastHit hit;
         Vector3 direction = playerTransform.position - transform.position;
@@ -93,6 +102,7 @@ public class EnemyLogic : MonoBehaviour
             if (hit.collider.tag == "Player")
             {
                 //play gun explosion SFX
+                AS.PlayOneShot(Fire);
                 PlayerAndCamera player = hit.transform.GetComponent<PlayerAndCamera>();
                 player.TakeDamage();
             }
