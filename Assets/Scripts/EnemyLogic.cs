@@ -17,10 +17,9 @@ public class EnemyLogic : MonoBehaviour
     [SerializeField] float smallTInterval; //D 0.1
     [SerializeField] float lastTInterval; //D 1
     // sound effects
-    public AudioSource AS;
-    public AudioClip ShortBeep;
-    public AudioClip LongBeep;
-    public AudioClip Fire;
+    [SerializeField] AudioSource shortBeepSFX;
+    [SerializeField] AudioSource longBeepSFX;
+    [SerializeField] AudioSource fireSFX;
 
     void Start()
     {
@@ -67,7 +66,7 @@ public class EnemyLogic : MonoBehaviour
     {
         isAttacking = true;
 
-        //yield return new WaitForSeconds(timeUntilShooting);
+        shortBeepSFX.Play();
         for (int i = 0; i < 5; i++) 
         {
             yield return new WaitForSeconds(bigTInterval);
@@ -75,7 +74,7 @@ public class EnemyLogic : MonoBehaviour
             yield return new WaitForSeconds(bigTInterval);
             exclamationMark.enabled = true;
             //beep
-            AS.PlayOneShot(ShortBeep);
+            shortBeepSFX.Play();
 
         }
         for (int i = 0; i < 7; i++) 
@@ -85,24 +84,23 @@ public class EnemyLogic : MonoBehaviour
             yield return new WaitForSeconds(smallTInterval);
             exclamationMark.enabled = true;
             //beep
-            AS.PlayOneShot(ShortBeep);
+            shortBeepSFX.Play();
         }
         yield return new WaitForSeconds(smallTInterval);
         exclamationMark.enabled = false;
         yield return new WaitForSeconds(smallTInterval);
         exclamationMark.enabled = true;
         //long beep
-        AS.PlayOneShot(LongBeep);
+        longBeepSFX.Play();
         yield return new WaitForSeconds(lastTInterval);
         RaycastHit hit;
         Vector3 direction = playerTransform.position - transform.position;
         if (Physics.SphereCast(gunTip.position, sphereCastredius , direction, out hit, lookRange)) 
         {   
+            fireSFX.Play();
             Debug.DrawRay(gunTip.position, direction, Color.red, 1.0f);
             if (hit.collider.tag == "Player")
             {
-                //play gun explosion SFX
-                AS.PlayOneShot(Fire);
                 PlayerAndCamera player = hit.transform.GetComponent<PlayerAndCamera>();
                 player.TakeDamage();
             }
