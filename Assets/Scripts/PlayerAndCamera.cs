@@ -65,15 +65,14 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] GameObject settingsMenu;
     bool pauseActive;
     //sound effects!
-    public AudioSource AS;
-    public AudioClip jumpSound;
-    public AudioClip EmptySlice;
-    public AudioClip EmptyShot;
-    public AudioClip Ghit;
-    public AudioClip Grope;
-    public AudioClip Slice;
-    public AudioClip GettingHit;
-    public AudioClip DropSound;
+    [SerializeField] AudioSource jumpSFX;
+    [SerializeField] AudioSource sliceMissSFX;
+    [SerializeField] AudioSource grappleMissSFX;
+    [SerializeField] AudioSource grappleHitSFX;
+    [SerializeField] AudioSource grapplePullSFX;
+    [SerializeField] AudioSource swordHitSFX;
+    [SerializeField] AudioSource gettingHitSFX;
+    [SerializeField] AudioSource LandingSFX;
 
 
     void Start()
@@ -149,7 +148,7 @@ public class PlayerAndCamera : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
         if (isGrounded && velocity.y < 0) 
         {
-            if (hasJumped) AS.PlayOneShot(DropSound);//play landingSFX
+            if (hasJumped) LandingSFX.Play();//play landingSFX
             hasJumped = false;
             controller.slopeLimit = 45.0f;
             velocity.y = -2f; //Reseting fall force if grounded
@@ -169,7 +168,7 @@ public class PlayerAndCamera : MonoBehaviour
     }
     void Jump()
     {
-        AS.PlayOneShot(jumpSound);
+        jumpSFX.Play();
         controller.slopeLimit = 100.0f;
         velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         hasJumped = true;
@@ -225,20 +224,20 @@ public class PlayerAndCamera : MonoBehaviour
         {
             if (hit.collider.tag == "GrappbleObject")
             {
-                AS.PlayOneShot(Ghit);
+                grappleHitSFX.Play();
                 grapplePoint = hit.point;
                 Invoke(nameof(ExecuteGrapple), grappleDelayTime);
             }
             else
             {
-                AS.PlayOneShot(EmptyShot);
+                grappleMissSFX.Play();
                 grapplePoint = cam.position + cam.forward * maxGrappleDistance;
                 Invoke(nameof(StopGrapple), grappleDelayTime);
             }
         }
         else
         {
-            AS.PlayOneShot(EmptyShot);
+            grappleMissSFX.Play();
             grapplePoint = cam.position + cam.forward * maxGrappleDistance;
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
@@ -277,7 +276,7 @@ public class PlayerAndCamera : MonoBehaviour
         JumpToPosition(grapplePoint, highestPointOnArc);
         DoFov(grappleFOV);
         Invoke(nameof(StopGrapple), 1f);
-        AS.PlayOneShot(Grope);
+        grapplePullSFX.Play();
     }
     void StopGrapple()
     {
@@ -310,7 +309,7 @@ public class PlayerAndCamera : MonoBehaviour
 
     void Attack()
     {
-        AS.PlayOneShot(EmptySlice);
+        sliceMissSFX.Play();
         isAttacking = true;
         playerAnimator.SetTrigger("Attack");
         attackCollider.enabled = true;
@@ -326,7 +325,7 @@ public class PlayerAndCamera : MonoBehaviour
         if(other.tag == "Enemy")
         {
             
-            AS.PlayOneShot(Slice);
+            swordHitSFX.Play();
             Destroy(other.gameObject);
         }
         
@@ -339,7 +338,7 @@ public class PlayerAndCamera : MonoBehaviour
     public void TakeDamage()
     {
         healthPoints --;
-        AS.PlayOneShot(GettingHit);
+        gettingHitSFX.Play();
         UpdateHealthUI();
         if (healthPoints < 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//kill player
     }
