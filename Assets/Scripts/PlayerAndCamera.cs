@@ -258,6 +258,7 @@ public class PlayerAndCamera : MonoBehaviour
     {
         activeGrapple = true;
         canCancelGrapple = true;
+        
         velocityToSet = CalculateJumpVelocity(transform.position , targetPosition , trajectoryHeight);
         Invoke(nameof(SetVelocity), 0.1f);
     }
@@ -266,6 +267,7 @@ public class PlayerAndCamera : MonoBehaviour
     {
         velocity = velocityToSet;
         hasJumped = true;
+        canCancelGrapple = true;
     }
     void ExecuteGrapple()
     {
