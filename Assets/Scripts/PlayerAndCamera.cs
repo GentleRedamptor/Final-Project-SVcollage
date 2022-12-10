@@ -82,7 +82,7 @@ public class PlayerAndCamera : MonoBehaviour
         originalSensitivity = sensitivity;
         aimAssistSensitivity = sensitivity * 0.5f;
         healthPoints = 3;
-        sphereCastredius = 0.1f;
+        sphereCastredius = 0.2f;
         pauseActive = false;
         isAttacking = false;
         isGrappling = false;

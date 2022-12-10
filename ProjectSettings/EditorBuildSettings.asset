@@ -11,7 +11,25 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ProtoLevel1.unity
     guid: 4f7f965f9e507644d806234dba8bb037
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/EnemyTestLab.unity
     guid: 375120db1a134e6408f78d568ec3cc56
+  - enabled: 1
+    path: Assets/Scenes/ProtoLevel2.unity
+    guid: d8c744475b4a742f999cfe89a03fec0d
+  - enabled: 1
+    path: Assets/Scenes/Noam'sLevels/TutorialLevel3.unity
+    guid: 4e1bd82a54e13f24db3372d74debce60
+  - enabled: 1
+    path: Assets/Scenes/Noam'sLevels/TutorialLevel1.unity
+    guid: 1d6176b011654fa4d81020d5d890fd24
+  - enabled: 1
+    path: Assets/Scenes/Noam'sLevels/TutorialLevel2.unity
+    guid: 71eda4a13d4e02c4a9765ff53e2cd5d1
+  - enabled: 1
+    path: Assets/Scenes/ProtoLevel3.unity
+    guid: d253d0ba4080d4deaa4a708b84a53259
+  - enabled: 0
+    path: Assets/Scenes/Shon'S Test.unity
+    guid: 5137a06e0e00f4eb28beb3d9255eae71
   m_configObjects: {}

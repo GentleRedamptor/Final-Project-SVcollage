@@ -11,7 +11,6 @@ public class EnemyLogic : MonoBehaviour
     bool isAttacking;
     [SerializeField] Transform gunTip;
     float sphereCastredius;
-    [SerializeField] float timeUntilShooting;
     [SerializeField] SpriteRenderer exclamationMark;
     [SerializeField] float bigTInterval; //D 0.25
     [SerializeField] float smallTInterval; //D 0.1
