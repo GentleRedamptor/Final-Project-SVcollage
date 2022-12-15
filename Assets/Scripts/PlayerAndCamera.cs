@@ -74,6 +74,12 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] AudioSource gettingHitSFX;
     [SerializeField] AudioSource LandingSFX;
 
+    //screen shake effect
+    [SerializeField] float shakeIntensity = 0.1f;
+    [SerializeField] float shakeDuration = 0.5f;
+
+
+
 
     void Start()
     {
@@ -148,7 +154,11 @@ public class PlayerAndCamera : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
         if (isGrounded && velocity.y < 0) 
         {
-            if (hasJumped) LandingSFX.Play();//play landingSFX
+            if (hasJumped) 
+            {
+                LandingSFX.Play();
+                StartCoroutine(ScreenShake());
+            }
             hasJumped = false;
             controller.slopeLimit = 45.0f;
             velocity.y = -2f; //Reseting fall force if grounded
@@ -341,6 +351,7 @@ public class PlayerAndCamera : MonoBehaviour
     {
         healthPoints --;
         gettingHitSFX.Play();
+        StartCoroutine(ScreenShake());
         UpdateHealthUI();
         if (healthPoints < 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//kill player
     }
@@ -361,6 +372,27 @@ public class PlayerAndCamera : MonoBehaviour
                 hearts[i].gameObject.SetActive(false);
             }
         }
+    }
+
+    IEnumerator ScreenShake ()
+    {
+        Quaternion camOriginalRot = cam.localRotation;
+
+        float elapsed = 0.0f;
+
+        while (elapsed < shakeDuration)
+        {
+            float x = Random.Range(-1f, 1f) * shakeIntensity;
+            float z = Random.Range(-1f, 1f) * shakeIntensity/2;
+
+            cam.localRotation = new Quaternion(x, camOriginalRot.y, z, camOriginalRot.w);
+
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        cam.localRotation = camOriginalRot;
     }
 
 }

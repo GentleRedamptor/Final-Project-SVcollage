@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.6439045, g: 0.6791233, b: 0.7361792, a: 1}
+  m_IndirectSpecularColor: {r: 0.6884495, g: 0.7250487, b: 0.7787736, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,8 +97,9 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_LightingDataAsset: {fileID: 112000000, guid: aac237e00a31f9442857aae319d1f374,
+    type: 2}
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -862,6 +863,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1828121346405178120, guid: 562d3857c57ab66469dee37c494b74d0,
+        type: 3}
+      propertyPath: shakeIntensity
+      value: 0.005
       objectReference: {fileID: 0}
     - target: {fileID: 1828121346405178123, guid: 562d3857c57ab66469dee37c494b74d0,
         type: 3}
