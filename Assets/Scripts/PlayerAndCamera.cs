@@ -78,6 +78,10 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] float shakeIntensity = 0.1f;
     [SerializeField] float shakeDuration = 0.5f;
 
+    //getting hit red effect
+    [SerializeField] Image redHit;
+    float fadeSpeed = 0.5f;
+
 
 
 
@@ -118,7 +122,8 @@ public class PlayerAndCamera : MonoBehaviour
         if (Input.GetButtonDown("Fire1") && !isGrappling) StartGrapple();
         if (grappleCDTimer > 0) grappleCDTimer -= Time.deltaTime;
         if (Input.GetButtonDown("Fire2") && !isAttacking) Attack(); 
-        PlayerMovement();                
+        PlayerMovement(); 
+        if (redHit.color.a != 0)FadeOutHurt();               
     }
 
 
@@ -353,6 +358,7 @@ public class PlayerAndCamera : MonoBehaviour
         gettingHitSFX.Play();
         StartCoroutine(ScreenShake());
         UpdateHealthUI();
+        GotHurtEffect();
         if (healthPoints < 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//kill player
     }
     void UpdateHealthUI()
@@ -393,6 +399,23 @@ public class PlayerAndCamera : MonoBehaviour
         }
 
         cam.localRotation = camOriginalRot;
+    }
+    
+    void GotHurtEffect()
+    {
+       var hitColor = redHit.color;
+       hitColor.a = 0.8f;
+       redHit.color = hitColor; 
+    }
+    
+    void FadeOutHurt()
+    {
+    Color color = redHit.color;
+    float alpha = color.a;
+    alpha -= fadeSpeed * Time.deltaTime;
+    alpha = Mathf.Clamp01(alpha);
+    color.a = alpha;
+    redHit.color = color;
     }
 
 }

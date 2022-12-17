@@ -22,6 +22,12 @@ public class EnemyLogic : MonoBehaviour
     [SerializeField] AudioSource alertSFX;
     [SerializeField] Transform enemyHead;
     Vector3 playerHightOffset;
+    
+    // laser sight
+    [SerializeField] LineRenderer laserSight;  
+    [SerializeField] Transform laserSightPos; 
+
+
 
     void Start()
     {
@@ -29,10 +35,13 @@ public class EnemyLogic : MonoBehaviour
         sphereCastredius = 0.1f;
         exclamationMark.enabled = false;
         playerHightOffset = new Vector3(0,2.5f,0);
+        laserSight.SetPosition(0, laserSightPos.position);
+        laserSight.enabled = false;
     }
 
     void Update()
     {
+        laserSight.SetPosition(0, laserSightPos.position);
         if(Physics.CheckSphere(transform.position, lookRange, playerLayerMask))
         {
             CheckIfPlayerInLOS();
@@ -67,7 +76,6 @@ public class EnemyLogic : MonoBehaviour
     IEnumerator ShootingProcess()
     {
         isAttacking = true;
-
         alertSFX.Play();
         for (int i = 0; i < 5; i++) 
         {
@@ -98,6 +106,15 @@ public class EnemyLogic : MonoBehaviour
         {   
             fireSFX.Play();
             Debug.DrawRay(gunTip.position, direction, Color.red, 1.0f);
+            Vector3 direction2 = playerTransform.position - laserSightPos.position;
+            laserSight.SetPosition(0, laserSightPos.position);
+            RaycastHit laserhit;
+            if (Physics.Raycast(laserSightPos.position, direction2, out laserhit, lookRange)) 
+            {
+                laserSight.enabled = true;
+                laserSight.SetPosition(1, hit.point - new Vector3 (0,1,0));
+                Invoke(nameof(DisableShotTrace), 1);
+            }
             if (hit.collider.tag == "Player")
             {
                 PlayerAndCamera player = hit.transform.GetComponent<PlayerAndCamera>();
@@ -106,6 +123,12 @@ public class EnemyLogic : MonoBehaviour
         }
         isAttacking = false;
         isFollowingPlayer = false;
-        exclamationMark.enabled = false;
+        exclamationMark.enabled = false;       
+    }
+
+    void DisableShotTrace()
+    {   
+        laserSight.enabled = false;
+        laserSight.SetPosition(1, laserSightPos.position);
     }
 }

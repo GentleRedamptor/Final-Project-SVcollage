@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Sean's levels/Shon-LVL2.unity
     guid: d253d0ba4080d4deaa4a708b84a53259
   - enabled: 1
-    path: Assets/Scenes/Sean's levels/Shon-LVL3.unity
+    path: Assets/Scenes/Shon-LVL3.unity
     guid: 69ff23bf78a2a4a15a51b65c0ef16581
   - enabled: 1
     path: Assets/Scenes/Sean's levels/Shon-LVL5.unity
