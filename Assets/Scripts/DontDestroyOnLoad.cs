@@ -6,6 +6,7 @@ public class DontDestroyOnLoad : MonoBehaviour
 {
     void Awake()
     {
+        gameObject.transform.SetParent(null);
         GameObject[] musicObj = GameObject.FindGameObjectsWithTag("GameMusic");
         if (musicObj.Length > 1)
         {

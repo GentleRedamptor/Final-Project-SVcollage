@@ -13,7 +13,7 @@ public class FinishLine : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            gameManager.WinLevel();
+            StartCoroutine(gameManager.WinLevel());
         }
         
     }
