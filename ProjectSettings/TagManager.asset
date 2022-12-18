@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - DeathPlane
   - GrappbleObject
+  - GameMusic
   layers:
   - Default
   - TransparentFX

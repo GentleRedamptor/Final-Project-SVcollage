@@ -10,7 +10,7 @@ public class PlayerAndCamera : MonoBehaviour
    
     float mouseX;
     float mouseY;
-    [SerializeField] float sensitivity;
+    public float sensitivity;
     float originalSensitivity;
     float aimAssistSensitivity;
     Transform rotateCam;
@@ -74,6 +74,16 @@ public class PlayerAndCamera : MonoBehaviour
     [SerializeField] AudioSource gettingHitSFX;
     [SerializeField] AudioSource LandingSFX;
 
+    //screen shake effect
+    [SerializeField] float shakeIntensity = 0.1f;
+    [SerializeField] float shakeDuration = 0.5f;
+
+    //getting hit red effect
+    [SerializeField] Image redHit;
+    float fadeSpeed = 0.5f;
+
+
+
 
     void Start()
     {
@@ -112,7 +122,8 @@ public class PlayerAndCamera : MonoBehaviour
         if (Input.GetButtonDown("Fire1") && !isGrappling) StartGrapple();
         if (grappleCDTimer > 0) grappleCDTimer -= Time.deltaTime;
         if (Input.GetButtonDown("Fire2") && !isAttacking) Attack(); 
-        PlayerMovement();                
+        PlayerMovement(); 
+        if (redHit.color.a != 0)FadeOutHurt();               
     }
 
 
@@ -148,7 +159,11 @@ public class PlayerAndCamera : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
         if (isGrounded && velocity.y < 0) 
         {
-            if (hasJumped) LandingSFX.Play();//play landingSFX
+            if (hasJumped) 
+            {
+                LandingSFX.Play();
+                StartCoroutine(ScreenShake());
+            }
             hasJumped = false;
             controller.slopeLimit = 45.0f;
             velocity.y = -2f; //Reseting fall force if grounded
@@ -341,7 +356,9 @@ public class PlayerAndCamera : MonoBehaviour
     {
         healthPoints --;
         gettingHitSFX.Play();
+        StartCoroutine(ScreenShake());
         UpdateHealthUI();
+        GotHurtEffect();
         if (healthPoints < 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//kill player
     }
     void UpdateHealthUI()
@@ -361,6 +378,44 @@ public class PlayerAndCamera : MonoBehaviour
                 hearts[i].gameObject.SetActive(false);
             }
         }
+    }
+
+    IEnumerator ScreenShake ()
+    {
+        Quaternion camOriginalRot = cam.localRotation;
+
+        float elapsed = 0.0f;
+
+        while (elapsed < shakeDuration)
+        {
+            float x = Random.Range(-1f, 1f) * shakeIntensity;
+            float z = Random.Range(-1f, 1f) * shakeIntensity/2;
+
+            cam.localRotation = new Quaternion(x, camOriginalRot.y, z, camOriginalRot.w);
+
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        cam.localRotation = camOriginalRot;
+    }
+    
+    void GotHurtEffect()
+    {
+       var hitColor = redHit.color;
+       hitColor.a = 0.8f;
+       redHit.color = hitColor; 
+    }
+    
+    void FadeOutHurt()
+    {
+    Color color = redHit.color;
+    float alpha = color.a;
+    alpha -= fadeSpeed * Time.deltaTime;
+    alpha = Mathf.Clamp01(alpha);
+    color.a = alpha;
+    redHit.color = color;
     }
 
 }
