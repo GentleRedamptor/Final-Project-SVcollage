@@ -24,19 +24,19 @@ EditorBuildSettings:
     path: Assets/Scenes/Noam'sLevels/TutorialLevel5.unity
     guid: 2f99da6d0264a694aa9392696805e0bf
   - enabled: 1
-    path: Assets/Scenes/ProtoLevel1.unity
+    path: Assets/Scenes/Noam'sLevels/ProtoLevel1.unity
     guid: 4f7f965f9e507644d806234dba8bb037
   - enabled: 1
-    path: Assets/Scenes/Shon-LVL2.unity
+    path: Assets/Scenes/Sean's levels/Shon-LVL1.unity
     guid: dfab5bb0c3fbd4880932f2fa4e1bf555
   - enabled: 1
-    path: Assets/Scenes/Shon-LVL1.unity
+    path: Assets/Scenes/Sean's levels/Shon-LVL2.unity
     guid: d253d0ba4080d4deaa4a708b84a53259
   - enabled: 1
     path: Assets/Scenes/Shon-LVL3.unity
     guid: 69ff23bf78a2a4a15a51b65c0ef16581
   - enabled: 1
-    path: Assets/Scenes/Shon-LVL4.unity
+    path: Assets/Scenes/Sean's levels/Shon-LVL5.unity
     guid: d8c744475b4a742f999cfe89a03fec0d
   - enabled: 1
     path: Assets/Scenes/Ending.unity
