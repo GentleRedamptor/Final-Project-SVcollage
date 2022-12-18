@@ -38,4 +38,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Sean's levels/Shon-LVL5.unity
     guid: d8c744475b4a742f999cfe89a03fec0d
+  - enabled: 1
+    path: Assets/Scenes/Ending.unity
+    guid: 8555a24c0de1e574782b4d3585df10b7
   m_configObjects: {}
