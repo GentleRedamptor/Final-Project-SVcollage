@@ -10,7 +10,7 @@ public class PlayerAndCamera : MonoBehaviour
    
     float mouseX;
     float mouseY;
-    [SerializeField] float sensitivity;
+    public float sensitivity;
     float originalSensitivity;
     float aimAssistSensitivity;
     Transform rotateCam;
