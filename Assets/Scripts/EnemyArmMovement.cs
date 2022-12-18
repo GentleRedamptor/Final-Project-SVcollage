@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyArmMovement : MonoBehaviour
 {
     Transform playerTransform;
+    [SerializeField] EnemyLogic enemyscript;
 
     void Start()
     {
@@ -13,7 +14,7 @@ public class EnemyArmMovement : MonoBehaviour
 
     void Update()
     {
-       AimArm(); 
+       if (enemyscript.isFollowingPlayer)AimArm(); 
     }
 
     void AimArm()
