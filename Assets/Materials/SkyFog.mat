@@ -22,7 +22,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: SkyFog
   m_Shader: {fileID: 4800000, guid: 5e444cd13928b274babcaedb447ba3ef, type: 3}
-  m_ShaderKeywords: _FOGBOTTOM_ON
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -73,7 +73,7 @@ Material:
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _Exposure: 1
-    - _FogBottom: 1
+    - _FogBottom: 0
     - _FogEnd: 0.074
     - _FogIntens: 0.749
     - _FogStart: 0.039

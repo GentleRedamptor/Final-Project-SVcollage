@@ -82,7 +82,7 @@ public class PlayerAndCamera : MonoBehaviour
         originalSensitivity = sensitivity;
         aimAssistSensitivity = sensitivity * 0.5f;
         healthPoints = 3;
-        sphereCastredius = 0.2f;
+        sphereCastredius = 0.1f;
         pauseActive = false;
         isAttacking = false;
         isGrappling = false;
@@ -258,7 +258,6 @@ public class PlayerAndCamera : MonoBehaviour
     {
         activeGrapple = true;
         canCancelGrapple = true;
-        
         velocityToSet = CalculateJumpVelocity(transform.position , targetPosition , trajectoryHeight);
         Invoke(nameof(SetVelocity), 0.1f);
     }
@@ -267,7 +266,6 @@ public class PlayerAndCamera : MonoBehaviour
     {
         velocity = velocityToSet;
         hasJumped = true;
-        canCancelGrapple = true;
     }
     void ExecuteGrapple()
     {
