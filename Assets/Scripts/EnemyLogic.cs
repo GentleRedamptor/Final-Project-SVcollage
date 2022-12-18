@@ -6,11 +6,12 @@ public class EnemyLogic : MonoBehaviour
 {  
     [SerializeField] float lookRange;
     [SerializeField] LayerMask playerLayerMask;
-    public bool isFollowingPlayer;
+    bool isFollowingPlayer;
     Transform playerTransform;
     bool isAttacking;
     [SerializeField] Transform gunTip;
     float sphereCastredius;
+    [SerializeField] float timeUntilShooting;
     [SerializeField] SpriteRenderer exclamationMark;
     [SerializeField] float bigTInterval; //D 0.25
     [SerializeField] float smallTInterval; //D 0.1
@@ -19,31 +20,19 @@ public class EnemyLogic : MonoBehaviour
     [SerializeField] AudioSource shortBeepSFX;
     [SerializeField] AudioSource longBeepSFX;
     [SerializeField] AudioSource fireSFX;
-    [SerializeField] AudioSource alertSFX;
-    [SerializeField] Transform enemyHead;
-    Vector3 playerHightOffset;
-    
-    // laser sight
-    [SerializeField] LineRenderer laserSight;  
-    [SerializeField] Transform laserSightPos; 
-
-
 
     void Start()
     {
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();
         sphereCastredius = 0.1f;
         exclamationMark.enabled = false;
-        playerHightOffset = new Vector3(0,2.5f,0);
-        laserSight.SetPosition(0, laserSightPos.position);
-        laserSight.enabled = false;
     }
 
     void Update()
     {
-        laserSight.SetPosition(0, laserSightPos.position);
         if(Physics.CheckSphere(transform.position, lookRange, playerLayerMask))
         {
+            //Debug.Log("Player in range");
             CheckIfPlayerInLOS();
             if(isFollowingPlayer) //if following look at player no X rotation
             {
@@ -59,11 +48,11 @@ public class EnemyLogic : MonoBehaviour
     void CheckIfPlayerInLOS()
     {
         if(isFollowingPlayer) return;
-        Vector3 direction = (playerTransform.position + playerHightOffset) - enemyHead.position;
+        Vector3 direction = playerTransform.position - transform.position;
         RaycastHit hit;
-        if (Physics.SphereCast(enemyHead.position, sphereCastredius , direction, out hit, lookRange)) 
+        if (Physics.SphereCast(gunTip.position, sphereCastredius , direction, out hit, lookRange)) 
         {
-            Debug.DrawRay(enemyHead.position , direction, Color.red, 1.0f);
+            Debug.DrawRay(gunTip.position, direction, Color.red, 1.0f);
             if (hit.collider.tag == "Player")
             {
                 isFollowingPlayer = true;
@@ -76,13 +65,15 @@ public class EnemyLogic : MonoBehaviour
     IEnumerator ShootingProcess()
     {
         isAttacking = true;
-        alertSFX.Play();
+
+        shortBeepSFX.Play();
         for (int i = 0; i < 5; i++) 
         {
             yield return new WaitForSeconds(bigTInterval);
             exclamationMark.enabled = false;
             yield return new WaitForSeconds(bigTInterval);
             exclamationMark.enabled = true;
+            //beep
             shortBeepSFX.Play();
 
         }
@@ -92,12 +83,14 @@ public class EnemyLogic : MonoBehaviour
             exclamationMark.enabled = false;
             yield return new WaitForSeconds(smallTInterval);
             exclamationMark.enabled = true;
+            //beep
             shortBeepSFX.Play();
         }
         yield return new WaitForSeconds(smallTInterval);
         exclamationMark.enabled = false;
         yield return new WaitForSeconds(smallTInterval);
         exclamationMark.enabled = true;
+        //long beep
         longBeepSFX.Play();
         yield return new WaitForSeconds(lastTInterval);
         RaycastHit hit;
@@ -106,15 +99,6 @@ public class EnemyLogic : MonoBehaviour
         {   
             fireSFX.Play();
             Debug.DrawRay(gunTip.position, direction, Color.red, 1.0f);
-            Vector3 direction2 = playerTransform.position - laserSightPos.position;
-            laserSight.SetPosition(0, laserSightPos.position);
-            RaycastHit laserhit;
-            if (Physics.Raycast(laserSightPos.position, direction2, out laserhit, lookRange)) 
-            {
-                laserSight.enabled = true;
-                laserSight.SetPosition(1, hit.point - new Vector3 (0,1,0));
-                Invoke(nameof(DisableShotTrace), 1);
-            }
             if (hit.collider.tag == "Player")
             {
                 PlayerAndCamera player = hit.transform.GetComponent<PlayerAndCamera>();
@@ -123,12 +107,6 @@ public class EnemyLogic : MonoBehaviour
         }
         isAttacking = false;
         isFollowingPlayer = false;
-        exclamationMark.enabled = false;       
-    }
-
-    void DisableShotTrace()
-    {   
-        laserSight.enabled = false;
-        laserSight.SetPosition(1, laserSightPos.position);
+        exclamationMark.enabled = false;
     }
 }
