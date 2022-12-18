@@ -1,9 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 <<<<<<<< HEAD:Assets/Scenes/Noam'sLevels/TutorialLevel5.meta
 guid: 7329199aaa45ea04c8d13319d3c78f3c
 ========
 guid: 518eca64023ddd64eadd6ae98c77f51f
 >>>>>>>> Noam's-Crib:Assets/QuestPointer.meta
+=======
+guid: 5cb19987cc78e44479c0060a668ae3be
+>>>>>>> parent of 9f6fe68 (Last commit)
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
