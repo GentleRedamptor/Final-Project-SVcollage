@@ -88,6 +88,7 @@ public class PlayerAndCamera : MonoBehaviour
     void Start()
     {
         LockMouse();
+        sensitivity = PlayerPrefs.GetFloat("sensitivity");
         originalSpeed = speed;
         originalSensitivity = sensitivity;
         aimAssistSensitivity = sensitivity * 0.5f;

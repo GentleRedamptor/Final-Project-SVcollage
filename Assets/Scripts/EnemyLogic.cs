@@ -113,7 +113,7 @@ public class EnemyLogic : MonoBehaviour
             {
                 laserSight.enabled = true;
                 laserSight.SetPosition(1, hit.point - new Vector3 (0,1,0));
-                Invoke(nameof(DisableShotTrace), 1);
+                Invoke(nameof(DisableShotTrace), 3);
             }
             if (hit.collider.tag == "Player")
             {

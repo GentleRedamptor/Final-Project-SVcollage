@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     }
     public void SetSensitivity(float sensitivity)
     {
-        player.sensitivity = sensitivity;
+        PlayerPrefs.SetFloat("sensitivity", sensitivity);
     }
 
 
